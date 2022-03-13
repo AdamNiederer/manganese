@@ -12,11 +12,11 @@ All benchmarks conducted on an i5-12600k and dual-channel PC-43200 DRAM
 
 | ISA     | Threading | Avg. Bandwidth |
 |---------+-----------+----------------|
-| AVX2    | 1c/1T     | 2300MB/s       |
-| AVX2    | 1C/1T     | 2900MB/s       |
-| AVX-512 | 1C/1T     | 7400MB/s       |
-| AVX2    | 6C+4c/16T | 29000MB/s      |
-| AVX-512 | 6C/12T    | 44000MB/s      |
+| AVX2    | 1c/1T     | 5640MB/s       |
+| AVX2    | 1C/1T     | 8600MB/s       |
+| AVX-512 | 1C/1T     | 9400MB/s       |
+| AVX2    | 6C+4c/16T | 53000MB/s      |
+| AVX-512 | 6C/12T    | 62000MB/s      |
 ** Requirements
 - Linux 5.x or newer
 - C11 Compiler w/ GNU extensions

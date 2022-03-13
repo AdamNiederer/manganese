@@ -200,11 +200,14 @@ void avx2_addressing(void* const restrict mem, const size_t size) {
 
     FOR_EACH_BLOCK_UP {
       set(mem, BLOCK_IDX, _mm256_add_epi64(_mm256_set1_epi64x(BLOCK_IDX), increasing));
+    }
+    FOR_EACH_BLOCK_UP {
       get(mem, BLOCK_IDX, _mm256_add_epi64(_mm256_set1_epi64x(BLOCK_IDX), increasing));
     }
-
     FOR_EACH_BLOCK_DOWN {
       set(mem, BLOCK_IDX, _mm256_add_epi64(_mm256_set1_epi64x(BLOCK_IDX), increasing));
+    }
+    FOR_EACH_BLOCK_DOWN {
       get(mem, BLOCK_IDX, _mm256_add_epi64(_mm256_set1_epi64x(BLOCK_IDX), increasing));
     }
   }
