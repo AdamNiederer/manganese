@@ -58,8 +58,10 @@ uint64_t hardware_ram_speed() {
     struct stat size;
     fseek(file, 0x15, SEEK_SET);
     while(!fread((void*) &ram_speed, sizeof(uint16_t), 1, file));
-    if(ram_speed) break;
     fclose(file);
+    if(ram_speed) {
+      break;
+    }
   }
 
   return (uint64_t) ram_speed;
