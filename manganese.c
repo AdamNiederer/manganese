@@ -44,9 +44,9 @@ int main(int argc, char** argv) {
     if(!mlock(mem, total_alloc - i * backoff)) {
       fprintf(stderr, "Threads           : %ld\n", cpu_count);
       if(ram_speed) {
-        fprintf(stderr, "Memory Speed      : %huMT/s (%ld MB/s per channel)\n" , ram_speed, 8 * (uint64_t)ram_speed);
+        fprintf(stderr, "Memory Speed      : %ldMT/s (%ld MB/s per channel)\n" , ram_speed, 8 * ram_speed);
       }
-      fprintf(stderr, "Buffer Size       : %ldMB of %ldMB (%.0f%%)\n", size / (1024 * 1024), sys.totalram / (1024 * 1024), 100.0 * size / sys.totalram );
+      fprintf(stderr, "Locked Memory     : %ldMB of %ldMB (%.0f%%)\n", size / (1024 * 1024), sys.totalram / (1024 * 1024), 100.0 * size / sys.totalram);
       fprintf(stderr, "Chunk Alignment   : %ldK\n" , cpu_count * getpagesize() / 1024);
       if(isa == HARDWARE_HAS_AVX512) {
         fprintf(stderr, "Instruction Set   : AVX-512\n");
