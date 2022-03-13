@@ -22,9 +22,6 @@ int main(int argc, char** argv) {
 
   const double fraction = atof(argv[1]) / 100;
 
-  struct sysinfo sys;
-  assert(!sysinfo(&sys));
-
   const int cpu_count = hardware_cpu_count();
   const int ram_speed = hardware_ram_speed();
   const int isa = hardware_instruction_set();
@@ -34,7 +31,10 @@ int main(int argc, char** argv) {
     exit(-1);
   }
 
+  struct sysinfo sys;
+  assert(!sysinfo(&sys));
   const uint64_t total_alloc = (sys.totalram * fraction) - ((long)(sys.totalram * fraction) % (cpu_count * getpagesize()));
+
   const size_t backoff = 256 * 1024 * 1024;
   void* mem;
   size_t size;
@@ -43,7 +43,9 @@ int main(int argc, char** argv) {
     size = total_alloc - i * backoff;
     if(!mlock(mem, total_alloc - i * backoff)) {
       fprintf(stderr, "Threads           : %ld\n", cpu_count);
-      fprintf(stderr, "Memory Speed      : %huMT/s (%ld MB/s)\n" , ram_speed, 8 * (uint64_t)ram_speed);
+      if(ram_speed) {
+        fprintf(stderr, "Memory Speed      : %huMT/s (%ld MB/s per channel)\n" , ram_speed, 8 * (uint64_t)ram_speed);
+      }
       fprintf(stderr, "Memory Size       : %ldMB\n", size / (1024 * 1024));
       fprintf(stderr, "Chunk Alignment   : %ldK\n" , cpu_count * getpagesize() / 1024);
       if(isa == HARDWARE_HAS_AVX512) {
@@ -59,7 +61,7 @@ int main(int argc, char** argv) {
       break;
     }
     if((total_alloc - i * backoff) <= backoff) {
-      fprintf(stderr, "can't lock any memory; try running as root\n");
+      fprintf(stderr, "can't lock any memory; try increasing memlock ulimit or running as root\n");
       exit(-1);
     }
   }

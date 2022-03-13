@@ -52,8 +52,7 @@ uint64_t hardware_ram_speed() {
   for(size_t i = 0; i < dmiglob.gl_pathc; i++) {
     FILE* file = fopen(dmiglob.gl_pathv[i], "r");
     if(file == NULL) {
-      fprintf(stderr, "could not stat dmi table; try running as root\n");
-      exit(-1);
+      return 0;
     }
     struct stat size;
     fseek(file, 0x15, SEEK_SET);
