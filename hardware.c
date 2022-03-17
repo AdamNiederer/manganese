@@ -72,6 +72,10 @@ uint64_t hardware_cpu_count() {
 
   sched_getaffinity((pid_t)getpid(), sizeof(cpu_set_t), &cpuset);
 
+  #ifndef _OPENMP
+  return CPU_COUNT(&cpuset);
+  #endif
+
   #pragma omp parallel
   {
     #pragma omp single
