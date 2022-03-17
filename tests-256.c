@@ -5,6 +5,7 @@
 #include "sys/sysinfo.h"
 
 #include "immintrin.h"
+#include "cblas.h"
 
 #include "SIMDxorshift/include/simdxorshift128plus.h"
 
@@ -211,4 +212,25 @@ void avx2_addressing(void* const restrict mem, const size_t size) {
       get(mem, BLOCK_IDX, _mm256_add_epi64(_mm256_set1_epi64x(BLOCK_IDX), increasing));
     }
   }
+}
+
+void avx2_sgemm(char* const restrict mem, const size_t size) {
+  const __m256 zeroes = _mm256_set1_ps(0.0f);
+  set_all_down(mem, size, (__m256i) zeroes);
+  for(ssize_t _ = 0; _ < 32; _++) {
+    _Pragma("omp parallel for schedule(static)")
+    for(ssize_t i = 0; i < CPUS; i++) {
+      for(ssize_t j = 64 * 64 * 4 * 2; j < (size / CPUS); j += 64 * 64 * 4) {
+        float* const a = (float*) &mem[BLOCK_IDX - 64 * 64 * 4 * 2];
+        float* const b = (float*) &mem[BLOCK_IDX - 64 * 64 * 4 * 1];
+        float* const c = (float*) &mem[BLOCK_IDX - 64 * 64 * 4 * 0];
+        cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 64, 64, 64, 1.0, a, 64, b, 64, 0.0, c, 64);
+        for(ssize_t k = 0; k < 64 * 64 * 4; k += 64) {
+          _mm_clflushopt(&mem[BLOCK_IDX + k]);
+        }
+        _mm_sfence();
+      }
+    }
+  }
+  get_all_up(mem, size, (__m256i) zeroes);
 }

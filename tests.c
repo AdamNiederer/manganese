@@ -10,7 +10,7 @@
 #include "tests-512.h"
 #include "tests-256.h"
 
-const size_t tests_sz = 11;
+const size_t tests_sz = 12;
 
 static struct test_t avx2_tests[] = {
   {.name = "Basic Tests", .passes = 4, .iters = 6, .run = avx2_basic_tests},
@@ -23,7 +23,8 @@ static struct test_t avx2_tests[] = {
   {.name = "Moving Inversions <<4", .passes = 4, .iters = 4, .run = avx2_moving_inversions_left_4},
   {.name = "Moving Saturations 16>>", .passes = 8, .iters = 16, .run = avx2_moving_saturations_right_16},
   {.name = "Moving Saturations <<8", .passes = 8, .iters = 8, .run = avx2_moving_saturations_left_8},
-  {.name = "Addressing", .passes = 4, .iters = 16, .run = avx2_addressing},
+  {.name = "Addressing", .passes = 2, .iters = 16, .run = avx2_addressing},
+  {.name = "SGEMM", .passes = 1, .iters = 32, .run = avx2_sgemm},
 };
 
 static struct test_t avx512_tests[] = {
@@ -38,6 +39,7 @@ static struct test_t avx512_tests[] = {
   {.name = "Moving Saturations 16>>", .passes = 8, .iters = 16, .run = avx512_moving_saturations_right_16},
   {.name = "Moving Saturations <<8", .passes = 8, .iters = 8, .run = avx512_moving_saturations_left_8},
   {.name = "Addressing", .passes = 4, .iters = 16, .run = avx512_addressing},
+  {.name = "SGEMM", .passes = 1, .iters = 32, .run = avx512_sgemm},
 };
 
 struct test_t* tests_init(size_t cpus, _Atomic(uint64_t)* errors, const int isa) {

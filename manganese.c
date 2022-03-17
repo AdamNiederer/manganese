@@ -86,10 +86,9 @@ int main(int argc, char** argv) {
 
     const double total_time = (double)(end.tv_sec - start.tv_sec) + (0.000000001 * (end.tv_nsec - start.tv_nsec));
     const double bandwidth = (total_passes * ((double)size / (1024 * 1024))) / total_time;
-    fprintf(stderr, "Tests completed in %.2f sec [%.0fMB/s]", total_time, bandwidth);
+    fprintf(stderr, "Tests completed in %.2f sec [%.0fMB/s]\n", total_time, bandwidth);
     if(ERRORS) {
-      fprintf(stderr, "\n\e[1;91m" "%ld errors detected" "\e[0m", ERRORS);
+      fprintf(stderr, "\e[1;91m" "%ld errors detected" "\e[0m" "\n", ERRORS);
     }
-    fprintf(stderr, "\n");
   }
 }

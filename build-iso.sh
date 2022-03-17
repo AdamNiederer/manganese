@@ -12,6 +12,11 @@ strip manganese
 cp manganese fs/bin
 ln -s lib fs/lib64
 cp /lib/libgomp.so* fs/lib
+cp /lib/libm.so* fs/lib
+cp /lib/libgfortran.so* fs/lib
+cp /lib/libquadmath.so* fs/lib
+cp /lib/libgcc_s.so* fs/lib
+cp /lib/libopenblas.so* fs/lib
 echo "manganese 96%" >> fs/opt/bootlocal.sh
 sed -i -e 's/prompt 1/prompt 0/g' iso/boot/isolinux/isolinux.cfg
 
