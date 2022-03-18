@@ -1,3 +1,6 @@
 [submodule "SIMDxorshift"]
 	path = SIMDxorshift
 	url = https://github.com/lemire/SIMDxorshift.git
+[submodule "OpenBLAS"]
+	path = OpenBLAS
+	url = https://github.com/xianyi/OpenBLAS
