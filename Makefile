@@ -1,6 +1,6 @@
 CFLAGS=-march=native -O3 -masm=intel -flto -fopenmp -std=gnu2x -ISIMDxorshift/include
 
-manganese: manganese.o tests-512.o tests-256.o tests.o hardware.o SIMDxorshift/simdxorshift128plus.o
+manganese: manganese.o tests-512.o tests-256.o tests.o hardware.o SIMDxorshift/simdxorshift128plus.o OpenBLAS/libopenblas.a
 	cc $(CFLAGS) -o manganese manganese.o tests-512.o tests-256.o tests.o hardware.o \
 	SIMDxorshift/simdxorshift128plus.o OpenBLAS/libopenblas.a \
 
