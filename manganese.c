@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
   const uint64_t total_alloc = (sys.totalram * fraction) - ((long)(sys.totalram * fraction) % (cpu_count * getpagesize()));
 
   const size_t backoff = 256 * 1024 * 1024;
-  void* mem;
+  void* mem = NULL;
   size_t size;
   for(size_t i = 0; i <= (total_alloc / backoff); i++) {
     mem = aligned_alloc(cpu_count * getpagesize(), total_alloc - i * backoff);
@@ -59,6 +59,9 @@ int main(int argc, char** argv) {
       fprintf(stderr, "\n");
 
       break;
+    } else {
+      free(mem);
+      mem = NULL;
     }
     if((total_alloc - i * backoff) <= backoff) {
       fprintf(stderr, "can't lock any memory; try increasing memlock ulimit or running as root\n");
