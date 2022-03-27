@@ -22,9 +22,9 @@ int main(int argc, char** argv) {
 
   const double fraction = atof(argv[1]) / 100;
 
-  const int cpu_count = hardware_cpu_count();
-  const int ram_speed = hardware_ram_speed();
-  const int isa = hardware_instruction_set();
+  const uint64_t cpu_count = hardware_cpu_count();
+  const uint64_t ram_speed = hardware_ram_speed();
+  const uint64_t isa = hardware_instruction_set();
 
   if(isa == HARDWARE_HAS_SSE) {
     fprintf(stderr, "AVX2 or AVX-512 not available, aborting\n");
@@ -42,12 +42,12 @@ int main(int argc, char** argv) {
     mem = aligned_alloc(cpu_count * getpagesize(), total_alloc - i * backoff);
     size = total_alloc - i * backoff;
     if(!mlock(mem, total_alloc - i * backoff)) {
-      fprintf(stderr, "Threads           : %ld\n", cpu_count);
+      fprintf(stderr, "Threads           : %lu\n", cpu_count);
       if(ram_speed) {
-        fprintf(stderr, "Memory Speed      : %ldMT/s (%ld MB/s per channel)\n" , ram_speed, 8 * ram_speed);
+        fprintf(stderr, "Memory Speed      : %luMT/s (%lu MB/s per channel)\n" , ram_speed, 8 * ram_speed);
       }
       fprintf(stderr, "Locked Memory     : %ldMB of %ldMB (%.0f%%)\n", size / (1024 * 1024), sys.totalram / (1024 * 1024), 100.0 * size / sys.totalram);
-      fprintf(stderr, "Chunk Alignment   : %ldK\n" , cpu_count * getpagesize() / 1024);
+      fprintf(stderr, "Chunk Alignment   : %luK\n" , cpu_count * getpagesize() / 1024);
       if(isa == HARDWARE_HAS_AVX512) {
         fprintf(stderr, "Instruction Set   : AVX-512\n");
       } else if(hardware_is_needlessly_disabled()) {
