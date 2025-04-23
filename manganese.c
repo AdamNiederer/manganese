@@ -5,6 +5,7 @@
 #include "string.h"
 #include "assert.h"
 #include "time.h"
+#include "stdbool.h"
 
 #include "sys/sysinfo.h"
 #include "sys/mman.h"
@@ -23,7 +24,7 @@ int main(int argc, char** argv) {
   const double fraction = atof(argv[1]) / 100;
 
   const uint64_t cpu_count = hardware_cpu_count();
-  const uint64_t ram_speed = hardware_ram_speed();
+  const uint64_t ram_speed = hardware_ram_speed(true);
   const uint64_t isa = hardware_instruction_set();
 
   if(isa == HARDWARE_HAS_SSE) {

@@ -8,6 +8,7 @@
 #include "stdlib.h"
 #include "sys/stat.h"
 #include "unistd.h"
+#include "stdbool.h"
 
 #include "omp.h"
 
@@ -45,7 +46,7 @@ uint64_t hardware_instruction_set() {
   }
 }
 
-uint64_t hardware_ram_speed() {
+uint64_t hardware_ram_speed(bool configured) {
   glob_t dmiglob;
   uint16_t ram_speed;
   assert(!glob("/sys/firmware/dmi/entries/17-*/raw", 0, NULL, &dmiglob));
@@ -55,7 +56,7 @@ uint64_t hardware_ram_speed() {
       return 0;
     }
     struct stat size;
-    fseek(file, 0x15, SEEK_SET);
+    fseek(file, configured ? 0x20 : 0x15, SEEK_SET);
     while(!fread((void*) &ram_speed, sizeof(uint16_t), 1, file));
     fclose(file);
     if(ram_speed) {
